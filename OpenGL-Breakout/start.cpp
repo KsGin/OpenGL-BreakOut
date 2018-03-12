@@ -7,7 +7,8 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
-void InitGlfw() {
+int main()
+{
 	/*初始化glfw*/
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //设置最大版本
@@ -17,20 +18,7 @@ void InitGlfw() {
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-}
 
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GL_TRUE);	}
-
-}
-
-
-
-int main()
-{
-	InitGlfw();
 	//创建一个窗口
 	const auto window = glfwCreateWindow(WIDTH, HEIGHT, "Breakout", nullptr, nullptr);
 
@@ -50,7 +38,6 @@ int main()
 
 	//设置位置
 	glViewport(0, 0, WIDTH, HEIGHT);
-	glfwSetKeyCallback(window, key_callback);
 
 	while (!glfwWindowShouldClose(window)) {
 
