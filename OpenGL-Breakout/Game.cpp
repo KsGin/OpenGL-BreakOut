@@ -8,7 +8,7 @@
  * Game 类构造方法
  */
 Game::Game(const GLuint width, const GLuint height) : width(width), height(height) {
-
+	this->Init();
 }
 
 /**
@@ -50,8 +50,8 @@ void Game::Update(GLfloat dt) {
 /**
  * 渲染游戏
  */
-void Game::Render() {
-	auto spriteShader = ResourceManager::GetTexture2D("face");
-	renderer->DrawSprite(spriteShader, glm::vec2(100.0f, 100.0f), glm::vec2(200, 300), 45.0f,
-		glm::vec3(0.0f, 0.0f, 0.0f));
+void Game::Render() const {
+	auto spriteTexture = ResourceManager::GetTexture2D("face");
+	renderer->DrawSprite(spriteTexture, glm::vec2(100.0f, 100.0f), glm::vec2(200, 300), 45.0f,
+		glm::vec3(0.1f, 0.1f, 0.1f));
 }

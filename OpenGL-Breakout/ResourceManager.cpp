@@ -9,7 +9,7 @@ std::unordered_map<std::string, Shader> ResourceManager::shaders = {};
 std::unordered_map<std::string, Texture2D> ResourceManager::textures = {};
 
 ResourceManager::ResourceManager() {
-	
+
 }
 
 Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile,
@@ -17,38 +17,33 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLch
 	std::string vShaderCode, fShaderCode, gShaderCode;
 	std::ifstream ifs(vShaderFile);
 	if (!ifs.is_open()) std::cout << "ERROR::ResourceManager::LoadShaderFromFile::vShaderFile::FILE_OPEN_REEOR";
-	while (!ifs.eof()) {
-		std::string tmp;
-		ifs >> tmp;
-		vShaderCode += tmp;
+	std::string tmp;
+	while (std::getline(ifs, tmp)) {
+		vShaderCode += tmp + "\n";
 	}
 	ifs.close();
 	ifs.open(fShaderFile);
 	if (!ifs.is_open()) std::cout << "ERROR::ResourceManager::LoadShaderFromFile::fShaderFile::FILE_OPEN_REEOR";
-	while (!ifs.eof()) {
-		std::string tmp;
-		ifs >> tmp;
-		fShaderCode += tmp;
+	while (std::getline(ifs, tmp)) {
+		fShaderCode += tmp + "\n";
 	}
 	ifs.close();
 	if (gShaderFile) {
 		ifs.open(gShaderFile);
 		if (!ifs.is_open()) std::cout << "ERROR::ResourceManager::LoadShaderFromFile::gShaderFile::FILE_OPEN_REEOR";
-		while (!ifs.eof()) {
-			std::string tmp;
-			ifs >> tmp;
-			gShaderCode += tmp;
+		while (std::getline(ifs, tmp)) {
+			gShaderCode += tmp + "\n";
 		}
 	}
 
 	Shader shader;
-	shader.Compile(vShaderCode.c_str(), fShaderCode.c_str(), gShaderCode.c_str());
+	shader.Compile(vShaderCode.c_str(), fShaderCode.c_str(), gShaderCode.empty() ? nullptr : gShaderCode.c_str());
 	return shader;
 }
 
 Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alpha) {
 	Texture2D texture;
-	int width, height , channel;
+	int width, height, channel;
 	const auto data = stbi_load(file, &width, &height, &channel, 0);
 	texture.Generate(width, height, data);
 	return texture;
@@ -56,7 +51,7 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alp
 
 Shader ResourceManager::LoadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile,
 	const GLchar* geometryShaderFile, const std::string name) {
-	auto shader = LoadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
+	const auto shader = LoadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
 	shaders[name] = shader;
 	return shader;
 }

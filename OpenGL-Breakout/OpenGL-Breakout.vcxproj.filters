@@ -53,10 +53,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sprite.vertexShader">
+    <None Include="resources\shaders\sprite.fragmentShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
-    <None Include="sprite.fragmentShader">
+    <None Include="resources\shaders\sprite.vertexShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
   </ItemGroup>
