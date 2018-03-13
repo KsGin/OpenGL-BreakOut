@@ -1,5 +1,4 @@
 #pragma once
-#include <map>
 #include "Shader.h"
 #include <string>
 #include "Texture2D.h"

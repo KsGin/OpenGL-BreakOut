@@ -50,7 +50,7 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alp
 Shader ResourceManager::LoadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile,
 	const GLchar* geometryShaderFile, const std::string name) {
 	const auto shader = LoadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
-	shaders[name] = shader;
+	ResourceManager::shaders[name] = shader;
 	return shader;
 }
 
