@@ -3,7 +3,6 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <Glm/glm.hpp>
 #include <Glm/gtc/type_ptr.hpp>
 
