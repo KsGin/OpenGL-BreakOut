@@ -124,6 +124,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="start.cpp" />
     <ClCompile Include="Texture2D.cpp" />
   </ItemGroup>
@@ -131,7 +132,12 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="Texture2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sprite.fragmentShader" />
+    <None Include="sprite.vertexShader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

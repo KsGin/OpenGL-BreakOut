@@ -3,9 +3,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "Game.h"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+float width = 1920;
+float height = 1080;
 
 int main()
 {
@@ -20,7 +21,7 @@ int main()
 #endif
 
 	//创建一个窗口
-	const auto window = glfwCreateWindow(WIDTH, HEIGHT, "Breakout", nullptr, nullptr);
+	const auto window = glfwCreateWindow(width, height, "Breakout", nullptr, nullptr);
 
 	//设置窗口环境
 	glfwMakeContextCurrent(window);
@@ -37,13 +38,17 @@ int main()
 	}
 
 	//设置
-	glViewport(0, 0, WIDTH, HEIGHT);
+	glViewport(0, 0, width, height);
 	glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	auto game = Game(width , height);
 	
 	while (!glfwWindowShouldClose(window)) {
 
+		game.Render();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);

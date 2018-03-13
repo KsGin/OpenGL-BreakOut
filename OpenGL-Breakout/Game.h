@@ -1,5 +1,6 @@
 #pragma once
 #include <GL/glew.h>
+#include "SpriteRender.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -10,6 +11,8 @@ enum GameState {
 
 class Game {
 public:
+
+	SpriteRenderer  *renderer;
 
 	GameState state;
 	GLboolean keys[1024];
