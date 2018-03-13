@@ -6,9 +6,11 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
+#include <unordered_map>
 
 class ResourceManager
 {
+
     // Loads and generates a shader from file
     static Shader    LoadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile = nullptr);
     // Loads a single texture from file
@@ -16,11 +18,12 @@ class ResourceManager
 public:
 
 	// 定义着色器与纹理存储
-	static std::map<std::string, Shader> shaders;
-	static std::map<std::string, Texture2D> textures;
+	static std::unordered_map<std::string, Shader> shaders;
+	static std::unordered_map<std::string, Texture2D> textures;
 
 	// 定义 Shader 交互方法
-	static Shader LoadShader(const GLchar *vertexShaderFile, const GLchar *fragmentShaderFile, const GLchar *geometryShaderFile, std::string name);
+	static Shader LoadShader(const GLchar *vertexShaderFile, const GLchar *fragmentShaderFile, const GLchar *geometryShaderFile,
+	                         std::string name);
 	static Shader GetShader(std::string name);
 
 	// 定义 Texture2D 交互方法
