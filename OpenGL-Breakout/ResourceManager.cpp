@@ -5,6 +5,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <Common/stb_image.h>
 
+std::unordered_map<std::string, Shader> ResourceManager::shaders = {};
+std::unordered_map<std::string, Texture2D> ResourceManager::textures = {};
+
+ResourceManager::ResourceManager() {
+	
+}
+
 Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLchar* fShaderFile,
 	const GLchar* gShaderFile) {
 	std::string vShaderCode, fShaderCode, gShaderCode;
@@ -49,8 +56,8 @@ Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alp
 
 Shader ResourceManager::LoadShader(const GLchar* vertexShaderFile, const GLchar* fragmentShaderFile,
 	const GLchar* geometryShaderFile, const std::string name) {
-	const auto shader = LoadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
-	ResourceManager::shaders[name] = shader;
+	auto shader = LoadShaderFromFile(vertexShaderFile, fragmentShaderFile, geometryShaderFile);
+	shaders[name] = shader;
 	return shader;
 }
 

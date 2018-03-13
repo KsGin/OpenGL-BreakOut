@@ -9,7 +9,7 @@
 
 class ResourceManager
 {
-
+	ResourceManager();
     // Loads and generates a shader from file
     static Shader    LoadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile = nullptr);
     // Loads a single texture from file
