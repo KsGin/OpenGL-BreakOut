@@ -53,5 +53,5 @@ void Game::Update(GLfloat dt) {
 void Game::Render() const {
 	auto spriteTexture = ResourceManager::GetTexture2D("face");
 	renderer->DrawSprite(spriteTexture, glm::vec2(100.0f, 100.0f), glm::vec2(200, 300), 45.0f,
-		glm::vec3(0.1f, 0.1f, 0.1f));
+		glm::vec3(0.1f, 0.2f, 0.1f));
 }

@@ -44,8 +44,13 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar* vShaderFile, const GLch
 Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alpha) {
 	Texture2D texture;
 	int width, height, channel;
+	if (alpha) {
+		texture.imageFormat = GL_RGBA;
+		texture.internalFormat = GL_RGBA;
+	}
 	const auto data = stbi_load(file, &width, &height, &channel, 0);
 	texture.Generate(width, height, data);
+	
 	return texture;
 }
 
