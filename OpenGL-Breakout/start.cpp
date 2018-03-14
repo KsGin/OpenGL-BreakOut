@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h>
 #include "Game.h"
 
-float width = 1920;
-float height = 1080;
+int width = 1920;
+int height = 1080;
 
 int main()
 {
