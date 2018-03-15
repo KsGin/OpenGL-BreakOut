@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include "SpriteRender.h"
+#include "GameLevel.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -17,6 +18,9 @@ public:
 	GameState state;
 	GLboolean keys[1024];
 	GLuint width, height;
+
+	std::vector<GameLevel> levels;
+    GLuint                 level;
 
 	Game(GLuint width , GLuint height);
 	~Game();

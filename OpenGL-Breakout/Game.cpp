@@ -32,6 +32,22 @@ void Game::Init() {
 	renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 	// 加载纹理
 	ResourceManager::LoadTexture2D("resources/textures/awesomeface.png", GL_TRUE, "face");
+	ResourceManager::LoadTexture2D("resources/textures/background.jpg", GL_FALSE, "background");
+    ResourceManager::LoadTexture2D("resources/textures/awesomeface.png", GL_TRUE, "face");
+    ResourceManager::LoadTexture2D("resources/textures/block.png", GL_FALSE, "block");
+    ResourceManager::LoadTexture2D("resources/textures/block_solid.png", GL_FALSE, "block_solid");
+    // 加载关卡
+    GameLevel one; 
+	one.Load("resources/levels/one.lvl", this->width, this->height * 0.5);
+//    GameLevel two; two.Load("levels/two.lvl", this->width, this->height * 0.5);
+//    GameLevel three; three.Load("levels/three.lvl", this->width, this->height * 0.5);
+//    GameLevel four; four.Load("levels/four.lvl", this->width, this->height * 0.5);
+    this->levels.push_back(one);
+//    this->levels.push_back(two);
+//    this->levels.push_back(three);
+//    this->levels.push_back(four);
+    this->level = 1;
+
 
 }
 
