@@ -8,6 +8,11 @@
 int width = 1920;
 int height = 1080;
 
+
+void Render(GLFWwindow* window, Game& game);
+
+void ProcessInput(GLFWwindow* window, Game& game);
+
 int main()
 {
 	/*≥ı ºªØglfw*/
@@ -40,20 +45,16 @@ int main()
 	//…Ë÷√
 	glViewport(0, 0, width, height);
 	glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	auto game = Game(width , height);
-	
+	auto game = Game(width, height);
+
 	while (!glfwWindowShouldClose(window)) {
 
-		game.Render();
-		
-		game.keys[GLFW_KEY_A] = glfwGetKey(window, GLFW_KEY_A);
-		game.keys[GLFW_KEY_D] = glfwGetKey(window, GLFW_KEY_D);
-
-		game.ProcessInput(1);
+		Render(window, game);
+		ProcessInput(window, game);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
@@ -61,4 +62,15 @@ int main()
 
 	return 0;
 
+}
+
+void Render(GLFWwindow *window, Game &game) {
+	game.Render();
+}
+
+void ProcessInput(GLFWwindow *window, Game &game) {
+	for (auto i = 0; i < 1024; ++i) {
+		game.keys[i] = glfwGetKey(window, i);
+	}
+	game.ProcessInput(1);
 }
