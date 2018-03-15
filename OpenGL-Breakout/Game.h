@@ -28,6 +28,6 @@ public:
 	void Init();
 	void ProcessInput(GLuint dt);
 	void Update(GLfloat dt);
-	void Render() const;
+	void Render();
 };
 
