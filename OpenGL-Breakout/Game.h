@@ -16,11 +16,13 @@ public:
 	SpriteRenderer  *renderer;
 
 	GameState state;
-	GLboolean keys[1024];
+	std::vector<GLboolean> keys;
 	GLuint width, height;
 
 	std::vector<GameLevel> levels;
     GLuint                 level;
+
+	GameObject      player;
 
 	Game(GLuint width , GLuint height);
 	~Game();

@@ -27,7 +27,7 @@ void GameLevel::Load(const GLchar* file, const GLuint levelWidth, const GLuint l
 		if (!tileData.empty())
 			this->Init(tileData, levelWidth, levelHeight);
 	}
-
+	fstream.close();
 }
 
 void GameLevel::Draw(SpriteRenderer& renderer) {
@@ -52,34 +52,30 @@ void GameLevel::Init(std::vector<std::vector<GLuint>> tileData, const GLuint lev
 	{
 		for (GLuint x = 0; x < width; ++x)
 		{
+			const glm::vec2 pos(unitWidth * x, unitHeight * y);
+			const glm::vec2 size(unitWidth, unitHeight);
+
 			if (tileData[y][x] == 1)
 			{
-				const glm::vec2 pos(unitWidth * x, unitHeight * y);
-				const glm::vec2 size(unitWidth, unitHeight);
 				GameObject obj(pos, size,
 					ResourceManager::GetTexture2D("block_solid"),
-					glm::vec3(0.8f, 0.8f, 0.7f)
+					glm::vec3(1.0f, 0.1f, 0.1f)
 				);
 				obj.isSolid = GL_TRUE;
 				this->bricks.push_back(obj);
-			}
-			else if (tileData[y][x] > 1)
+			} else if (tileData[y][x] > 1)
 			{
-				auto color = glm::vec3(1.0f); 
+				auto color = glm::vec3(0.5f); 
 				if (tileData[y][x] == 2)
-					color = glm::vec3(0.2f, 0.6f, 1.0f);
+					color = glm::vec3(0.3f, 0.2f, 0.0f);
 				else if (tileData[y][x] == 3)
-					color = glm::vec3(0.0f, 0.7f, 0.0f);
+					color = glm::vec3(0.1f, 0.3f, 0.1f);
 				else if (tileData[y][x] == 4)
-					color = glm::vec3(0.8f, 0.8f, 0.4f);
+					color = glm::vec3(0.4f, 0.6f, 0.1f);
 				else if (tileData[y][x] == 5)
-					color = glm::vec3(1.0f, 0.5f, 0.0f);
-
-				const glm::vec2 pos(unitWidth * x, unitHeight * y);
-				const glm::vec2 size(unitWidth, unitHeight);
+					color = glm::vec3(0.3f, 0.1f, 0.9f);
 				this->bricks.emplace_back(pos, size, ResourceManager::GetTexture2D("block"), color);
 			}
 		}
 	}
-
 }

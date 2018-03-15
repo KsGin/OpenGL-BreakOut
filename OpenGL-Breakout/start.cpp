@@ -49,6 +49,11 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 
 		game.Render();
+		
+		game.keys[GLFW_KEY_A] = glfwGetKey(window, GLFW_KEY_A);
+		game.keys[GLFW_KEY_D] = glfwGetKey(window, GLFW_KEY_D);
+
+		game.ProcessInput(1);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
