@@ -14,7 +14,7 @@ BallObject::BallObject(const glm::vec2 pos, const GLfloat radius, const glm::vec
 }
 
 glm::vec2 BallObject::Move(const GLfloat dt, const GLuint windowWidth) {
-	    // 如果没有被固定在挡板上
+	// 如果没有被固定在挡板上
     if (!this->stuck)
     { 
         // 移动球

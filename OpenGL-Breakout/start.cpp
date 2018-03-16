@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Game.h"
+#include <thread>
 
 int width = 1920;
 int height = 1080;
@@ -13,7 +14,7 @@ void Render(GLFWwindow* window, Game& game);
 
 void ProcessInput(GLFWwindow* window, Game& game);
 
-void Update(GLFWwindow* window, Game game);
+void Update(GLFWwindow* window, Game& game);
 
 int main()
 {
@@ -75,6 +76,6 @@ void ProcessInput(GLFWwindow *window, Game &game) {
 	game.ProcessInput(1);
 }
 
-void Update(GLFWwindow* window, Game game) {
-	game.Update(1);
+void Update(GLFWwindow* window, Game &game) {
+	game.Update(0.1f);
 }

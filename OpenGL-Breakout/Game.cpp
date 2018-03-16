@@ -4,6 +4,8 @@
 #include "Texture2D.h"
 #include <Glm/gtc/matrix_transform.inl>
 #include <GLFW/glfw3.h>
+#include <chrono>
+#include <thread>
 
 /**
  * Game 类构造方法
@@ -102,9 +104,11 @@ void Game::ProcessInput(const GLuint dt) {
 
 /**
  * 更新游戏状态
- */
+ */ 
 void Game::Update(const GLfloat dt) {
-	ball.Move(dt, width);
+	if (this->state == GAME_ACTIVE) {
+		ball.Move(dt, width);
+	}
 }
 
 /**
@@ -120,6 +124,7 @@ void Game::Render() {
 		this->levels[this->level].Draw(*renderer);
 		// 绘制挡板
 		this->player.Draw(*renderer);
+		// 绘制球
 		this->ball.Draw(*renderer);
 	}
 }
