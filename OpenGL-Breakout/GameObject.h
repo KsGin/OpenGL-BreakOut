@@ -16,7 +16,8 @@
 class GameObject
 {
 public:
-    // Object state
+	virtual ~GameObject() = default;
+	// Object state
     glm::vec2   position, size, velocity;
     glm::vec3   color;
     GLfloat     rotation;

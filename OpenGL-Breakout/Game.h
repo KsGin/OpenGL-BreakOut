@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include "SpriteRender.h"
 #include "GameLevel.h"
+#include "BallObject.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -23,6 +24,7 @@ public:
     GLuint                 level;
 
 	GameObject      player;
+	BallObject		ball;
 
 	Game(GLuint width , GLuint height);
 	~Game();

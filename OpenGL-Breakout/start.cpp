@@ -13,6 +13,8 @@ void Render(GLFWwindow* window, Game& game);
 
 void ProcessInput(GLFWwindow* window, Game& game);
 
+void Update(GLFWwindow* window, Game game);
+
 int main()
 {
 	/*≥ı ºªØglfw*/
@@ -52,16 +54,14 @@ int main()
 	auto game = Game(width, height);
 
 	while (!glfwWindowShouldClose(window)) {
-
-		Render(window, game);
 		ProcessInput(window, game);
+		Update(window,game);
+		Render(window, game);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-
 	return 0;
-
 }
 
 void Render(GLFWwindow *window, Game &game) {
@@ -73,4 +73,8 @@ void ProcessInput(GLFWwindow *window, Game &game) {
 		game.keys[i] = glfwGetKey(window, i);
 	}
 	game.ProcessInput(1);
+}
+
+void Update(GLFWwindow* window, Game game) {
+	game.Update(1);
 }

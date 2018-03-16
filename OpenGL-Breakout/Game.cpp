@@ -43,11 +43,11 @@ void Game::Init() {
 	// 加载关卡
 	GameLevel one;
 	one.Load("resources/levels/one.lvl", this->width, this->height * 0.5);
-	GameLevel two; 
+	GameLevel two;
 	two.Load("levels/two.lvl", this->width, this->height * 0.5);
-	GameLevel three; 
+	GameLevel three;
 	three.Load("levels/three.lvl", this->width, this->height * 0.5);
-	GameLevel four; 
+	GameLevel four;
 	four.Load("levels/four.lvl", this->width, this->height * 0.5);
 	this->levels.push_back(one);
 	this->levels.push_back(two);
@@ -57,35 +57,54 @@ void Game::Init() {
 
 	// 加载挡板
 	const auto paddleSize = glm::vec2(200.0f, 40.0f);
-	const auto paddlePos = glm::vec2(static_cast<GLfloat>(width) / 2 - paddleSize.x / 2 , height - paddleSize.y / 2);	//在底部
-	player = GameObject(paddlePos , paddleSize , ResourceManager::GetTexture2D("paddle") , glm::vec3(0.3f) , glm::vec2(500.0f));
+	const auto paddlePos = glm::vec2(static_cast<GLfloat>(width) / 2 - paddleSize.x / 2, height - paddleSize.y / 2);	//在底部
+	player = GameObject(paddlePos, paddleSize, ResourceManager::GetTexture2D("paddle"), glm::vec3(0.3f), glm::vec2(500.0f));
+
+	// 加载弹性球 
+	const auto ballRadius = 12.5f;
+	const auto ballPos = paddlePos + glm::vec2(player.size.x / 2 - ballRadius, -player.size.y + ballRadius);		//在挡板上面最中央
+	ball = BallObject(ballPos, ballRadius, glm::vec2(100.0f, -100.0f), ResourceManager::GetTexture2D("face"));
 }
 
 /**
  * 处理输入
  */
 void Game::ProcessInput(const GLuint dt) {
-	    if (this->state == GAME_ACTIVE)
-    {
-	    const auto velocity = 10.0f * dt;
-        // 移动挡板
-        if (this->keys[GLFW_KEY_A])
-        {
-            if (player.position.x >= 0)
-                player.position.x -= velocity;
-        }
-        if (this->keys[GLFW_KEY_D])
-        {
-            if (player.position.x <= this->width - player.size.x)
-                player.position.x += velocity;
-        }
-    }
+	if (this->state == GAME_ACTIVE)
+	{
+		const auto velocity = 10.0f * dt;
+		// 移动挡板
+		if (this->keys[GLFW_KEY_A])
+		{
+			if (player.position.x >= 0) {
+				player.position.x -= velocity;
+				if (ball.stuck) {
+					ball.position.x -= velocity;
+				}
+			}
+
+		}
+		if (this->keys[GLFW_KEY_D])
+		{
+			if (player.position.x <= this->width - player.size.x) {
+				player.position.x += velocity;
+				if (ball.stuck) {
+					ball.position.x += velocity;
+				}
+			}
+		}
+		if (this->keys[GLFW_KEY_SPACE])
+		{
+			ball.stuck = !ball.stuck;
+		}
+	}
 }
 
 /**
  * 更新游戏状态
  */
-void Game::Update(GLfloat dt) {
+void Game::Update(const GLfloat dt) {
+	ball.Move(dt, width);
 }
 
 /**
@@ -101,5 +120,6 @@ void Game::Render() {
 		this->levels[this->level].Draw(*renderer);
 		// 绘制挡板
 		this->player.Draw(*renderer);
+		this->ball.Draw(*renderer);
 	}
 }
