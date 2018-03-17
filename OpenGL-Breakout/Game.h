@@ -10,24 +10,35 @@ enum GameState {
 	GAME_WIN
 };
 
+enum Direction {
+	RIGHT,
+	DOWN,
+	LEFT,
+	UP,
+	CORNER
+};
 
 class Game {
 public:
 
-	SpriteRenderer  *renderer;
+	typedef std::tuple<GLboolean, Direction, glm::vec2> Collision; 
+
+	SpriteRenderer * renderer;
 
 	GameState state;
 	std::vector<GLboolean> keys;
 	GLuint width, height;
 
 	std::vector<GameLevel> levels;
-    GLuint                 level;
+	GLuint                 level;
 
 	GameObject      player;
 	BallObject		ball;
 
-	Game(GLuint width , GLuint height);
+	Game(GLuint width, GLuint height);
 	~Game();
+
+	bool CollisionDetection(const GameObject &brick, const BallObject &ball, int& xy) const;
 
 	void Init();
 	void ProcessInput(GLuint dt);
