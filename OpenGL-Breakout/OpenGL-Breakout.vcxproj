@@ -125,6 +125,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ParticleGeneraltor.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
@@ -136,12 +137,15 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLevel.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ParticleGeneraltor.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="particle.fragmentShader" />
+    <None Include="particle.vertexShader" />
     <None Include="resources\shaders\sprite.fragmentShader" />
     <None Include="resources\shaders\sprite.vertexShader" />
   </ItemGroup>

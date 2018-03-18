@@ -4,7 +4,6 @@
 #include "Texture2D.h"
 #include <Glm/gtc/matrix_transform.inl>
 #include <GLFW/glfw3.h>
-#include <algorithm>
 #include <iostream>
 
 /**
@@ -49,7 +48,7 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 		};
 
 		std::vector<float> dots(0);
-		for (int i = 0 ; i < 4 ; ++i) {
+		for (int i = 0; i < 4; ++i) {
 			dots.push_back(glm::dot(compess[i], glm::normalize(vecBrickToBall)));
 		}
 
@@ -58,28 +57,28 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 		if (dots[0] >= 0 && dots[0] <= 1 && dots[1] >= 0 && dots[1] <= 1) {
 			f = glm::dot(compess[1], compess[4]);
 			xy = dots[1] >= f ? 0 : 3;
-			if (dots[1] == f && glm::dot(compess[4] , velo) == -1) {
+			if (dots[1] == f && glm::dot(compess[4], velo) == -1) {
 				xy = 4;
 			}
 		}
 		if (dots[1] >= 0 && dots[1] <= 1 && dots[2] >= 0 && dots[2] <= 1) {
 			f = glm::dot(compess[2], compess[5]);
 			xy = (dots[2] >= f ? 1 : 0);
-			if (dots[2] == f && glm::dot(compess[5] , velo) == -1) {
+			if (dots[2] == f && glm::dot(compess[5], velo) == -1) {
 				xy = 4;
 			}
 		}
 		if (dots[2] >= 0 && dots[2] <= 1 && dots[3] >= 0 && dots[3] <= 1) {
 			f = glm::dot(compess[3], compess[6]);
 			xy = (dots[3] >= f ? 2 : 1);
-			if (dots[3] == f && glm::dot(compess[6] , velo) == -1) {
+			if (dots[3] == f && glm::dot(compess[6], velo) == -1) {
 				xy = 4;
 			}
 		}
 		if (dots[3] >= 0 && dots[3] <= 1 && dots[0] >= 0 && dots[0] <= 1) {
 			f = glm::dot(compess[0], compess[7]);
 			xy = (dots[0] >= f ? 3 : 2);
-			if (dots[0] == f && glm::dot(compess[7] , velo) == -1) {
+			if (dots[0] == f && glm::dot(compess[7], velo) == -1) {
 				xy = 4;
 			}
 		}
@@ -97,13 +96,16 @@ void Game::Init() {
 
 	// 加载着色器
 	ResourceManager::LoadShader("resources/shaders/sprite.vertexShader", "resources/shaders/sprite.fragmentShader", nullptr, "sprite");
+	ResourceManager::LoadShader("resources/shaders/particle.vertexShader", "resources/shaders/particle.fragmentShader", nullptr, "particle");
 	// 配置着色器
-	const auto projection = glm::ortho(0.0f, static_cast<GLfloat>(this->width),
-		static_cast<GLfloat>(this->height), 0.0f, -1.0f, 1.0f);
+	const auto projection = glm::ortho(0.0f, static_cast<GLfloat>(this->width), static_cast<GLfloat>(this->height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("sprite", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	ResourceManager::GetShader("particle").Use().SetInteger("particle", 0);
+	ResourceManager::GetShader("particle").SetMatrix4("projection", projection);
 	// 设置专用于渲染的控制
 	renderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
+	particles = ParticleGenerator(ResourceManager::GetShader("particle"), ResourceManager::GetTexture2D("face"), 500);
 	// 加载纹理
 	ResourceManager::LoadTexture2D("resources/textures/awesomeface.png", GL_TRUE, "face");
 	ResourceManager::LoadTexture2D("resources/textures/background.jpg", GL_FALSE, "background");
@@ -112,13 +114,13 @@ void Game::Init() {
 	ResourceManager::LoadTexture2D("resources/textures/paddle.png", GL_TRUE, "paddle");
 	// 加载关卡
 	GameLevel one;
-	one.Load("resources/levels/one.lvl", this->width, this->height * 0.5);
+	one.Load("resources/levels/one.lvl", this->width, this->height * 0.4);
 	GameLevel two;
-	two.Load("levels/two.lvl", this->width, this->height * 0.5);
+	two.Load("levels/two.lvl", this->width, this->height * 0.4);
 	GameLevel three;
-	three.Load("levels/three.lvl", this->width, this->height * 0.5);
+	three.Load("levels/three.lvl", this->width, this->height * 0.4);
 	GameLevel four;
-	four.Load("levels/four.lvl", this->width, this->height * 0.5);
+	four.Load("levels/four.lvl", this->width, this->height * 0.4);
 	this->levels.push_back(one);
 	this->levels.push_back(two);
 	this->levels.push_back(three);
@@ -179,6 +181,7 @@ void Game::ProcessInput(const GLuint dt) {
  */
 void Game::Update(const GLfloat dt) {
 	if (this->state == GAME_ACTIVE) {
+		//particles.Update(dt, ball, 2 , glm::vec2(ball.radius / 2));
 		ball.Move(dt, width);
 		int xy = 0;
 		for (GameObject& obj : levels[level].bricks) {
@@ -186,13 +189,11 @@ void Game::Update(const GLfloat dt) {
 				if (!obj.isSolid) {
 					obj.destroyed = true;
 				}
+				if (xy == UP || xy == DOWN) {
+					ball.velocity.y = -ball.velocity.y;
+				}
 				else {
-					if (xy == UP || xy == DOWN) {
-						ball.velocity.y = -ball.velocity.y;
-					}
-					else {
-						ball.velocity.x = -ball.velocity.x;
-					}
+					ball.velocity.y = -ball.velocity.y;
 				}
 			}
 		}
@@ -228,5 +229,7 @@ void Game::Render() {
 		this->player.Draw(*renderer);
 		// 绘制球
 		this->ball.Draw(*renderer);
+
+		//this->particles.Draw();
 	}
 }

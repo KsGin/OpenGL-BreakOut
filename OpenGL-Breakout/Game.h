@@ -3,6 +3,7 @@
 #include "SpriteRender.h"
 #include "GameLevel.h"
 #include "BallObject.h"
+#include "ParticleGeneraltor.h"
 
 enum GameState {
 	GAME_ACTIVE,
@@ -34,6 +35,8 @@ public:
 
 	GameObject      player;
 	BallObject		ball;
+
+	ParticleGenerator   particles; 
 
 	Game(GLuint width, GLuint height);
 	~Game();

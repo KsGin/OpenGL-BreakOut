@@ -43,6 +43,9 @@
     <ClCompile Include="BallObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleGeneraltor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -69,12 +72,21 @@
     <ClInclude Include="BallObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleGeneraltor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\sprite.fragmentShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
     <None Include="resources\shaders\sprite.vertexShader">
+      <Filter>Resource Files\Shader</Filter>
+    </None>
+    <None Include="particle.vertexShader">
+      <Filter>Resource Files\Shader</Filter>
+    </None>
+    <None Include="particle.fragmentShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
   </ItemGroup>
