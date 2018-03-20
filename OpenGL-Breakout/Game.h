@@ -24,14 +24,14 @@ public:
 
 	typedef std::tuple<GLboolean, Direction, glm::vec2> Collision; 
 
-	SpriteRenderer * renderer;
+	SpriteRenderer *renderer;
 
 	GameState state;
 	std::vector<GLboolean> keys;
 	GLuint width, height;
 
 	std::vector<GameLevel> levels;
-	GLuint                 level;
+	GLuint                 level{};
 
 	GameObject      player;
 	BallObject		ball;

@@ -73,6 +73,10 @@
     <IncludePath>C:\OpenGL\headers;$(IncludePath)</IncludePath>
     <LibraryPath>C:\OpenGL\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\OpenGL\headers;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenGL\libs;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,6 +108,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,8 +149,8 @@
     <ClInclude Include="Texture2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="particle.fragmentShader" />
-    <None Include="particle.vertexShader" />
+    <None Include="resources\shaders\particle.fragmentShader" />
+    <None Include="resources\shaders\particle.vertexShader" />
     <None Include="resources\shaders\sprite.fragmentShader" />
     <None Include="resources\shaders\sprite.vertexShader" />
   </ItemGroup>

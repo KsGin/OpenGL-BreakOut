@@ -83,10 +83,10 @@
     <None Include="resources\shaders\sprite.vertexShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
-    <None Include="particle.vertexShader">
+    <None Include="resources\shaders\particle.fragmentShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
-    <None Include="particle.fragmentShader">
+    <None Include="resources\shaders\particle.vertexShader">
       <Filter>Resource Files\Shader</Filter>
     </None>
   </ItemGroup>

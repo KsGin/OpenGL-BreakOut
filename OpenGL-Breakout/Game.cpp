@@ -37,10 +37,10 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 	if (glm::distance(pos, ballCenterPos) <= ball.radius) {
 		// 判断碰到的方向
 		std::vector<glm::vec2> compess{
-			glm::vec2(0.0f , -1.0f),
-			glm::vec2(1.0f , 0.0f),
-			glm::vec2(0.0f , 1.0f),
-			glm::vec2(-1.0f , 0.0f),
+			glm::vec2(0.0f , -1.0f),	// 上
+			glm::vec2(1.0f , 0.0f),		// 右
+			glm::vec2(0.0f , 1.0f),		// 下
+			glm::vec2(-1.0f , 0.0f),	// 左
 			glm::normalize(glm::vec2(brick.size.x , -brick.size.y)), //右上
 			glm::normalize(glm::vec2(brick.size.x , brick.size.y)), //右下
 			glm::normalize(glm::vec2(-brick.size.x , brick.size.y)), //左下
@@ -54,28 +54,28 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 
 		const glm::vec2 velo = glm::normalize(ball.velocity);
 		float f;
-		if (dots[0] >= 0 && dots[0] <= 1 && dots[1] >= 0 && dots[1] <= 1) {
+		if (dots[0] >= 0 && dots[0] < 1 && dots[1] > 0 && dots[1] <= 1) {
 			f = glm::dot(compess[1], compess[4]);
 			xy = dots[1] >= f ? 0 : 3;
 			if (dots[1] == f && glm::dot(compess[4], velo) == -1) {
 				xy = 4;
 			}
 		}
-		if (dots[1] >= 0 && dots[1] <= 1 && dots[2] >= 0 && dots[2] <= 1) {
+		if (dots[1] >= 0 && dots[1] < 1 && dots[2] > 0 && dots[2] <= 1) {
 			f = glm::dot(compess[2], compess[5]);
 			xy = (dots[2] >= f ? 1 : 0);
 			if (dots[2] == f && glm::dot(compess[5], velo) == -1) {
 				xy = 4;
 			}
 		}
-		if (dots[2] >= 0 && dots[2] <= 1 && dots[3] >= 0 && dots[3] <= 1) {
+		if (dots[2] >= 0 && dots[2] < 1 && dots[3] > 0 && dots[3] <= 1) {
 			f = glm::dot(compess[3], compess[6]);
 			xy = (dots[3] >= f ? 2 : 1);
 			if (dots[3] == f && glm::dot(compess[6], velo) == -1) {
 				xy = 4;
 			}
 		}
-		if (dots[3] >= 0 && dots[3] <= 1 && dots[0] >= 0 && dots[0] <= 1) {
+		if (dots[3] >= 0 && dots[3] < 1 && dots[0] > 0 && dots[0] <= 1) {
 			f = glm::dot(compess[0], compess[7]);
 			xy = (dots[0] >= f ? 3 : 2);
 			if (dots[0] == f && glm::dot(compess[7], velo) == -1) {
@@ -112,6 +112,7 @@ void Game::Init() {
 	ResourceManager::LoadTexture2D("resources/textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture2D("resources/textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::LoadTexture2D("resources/textures/paddle.png", GL_TRUE, "paddle");
+	
 	// 加载关卡
 	GameLevel one;
 	one.Load("resources/levels/one.lvl", this->width, this->height * 0.4);
@@ -181,7 +182,7 @@ void Game::ProcessInput(const GLuint dt) {
  */
 void Game::Update(const GLfloat dt) {
 	if (this->state == GAME_ACTIVE) {
-		//particles.Update(dt, ball, 2 , glm::vec2(ball.radius / 2));
+		particles.Update(0.1, ball, 2 , glm::vec2(ball.radius / 2));
 		ball.Move(dt, width);
 		int xy = 0;
 		for (GameObject& obj : levels[level].bricks) {
@@ -230,6 +231,6 @@ void Game::Render() {
 		// 绘制球
 		this->ball.Draw(*renderer);
 
-		//this->particles.Draw();
+		this->particles.Draw();
 	}
 }
