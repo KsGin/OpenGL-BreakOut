@@ -8,7 +8,8 @@
 enum GameState {
 	GAME_ACTIVE,
 	GAME_MENU,
-	GAME_WIN
+	GAME_WIN,
+	GAME_READY
 };
 
 enum Direction {
@@ -16,7 +17,8 @@ enum Direction {
 	DOWN,
 	LEFT,
 	UP,
-	CORNER
+	CORNER_N,
+	CORNER_E
 };
 
 class Game {
@@ -26,7 +28,7 @@ public:
 
 	SpriteRenderer *renderer;
 
-	GameState state;
+	GameState state = GAME_READY;
 	std::vector<GLboolean> keys;
 	GLuint width, height;
 
@@ -41,7 +43,7 @@ public:
 	Game(GLuint width, GLuint height);
 	~Game();
 
-	bool CollisionDetection(const GameObject &brick, const BallObject &ball, int& xy) const;
+	bool CollisionDetection(const GameObject &brick, BallObject &ball, int& xy) const;
 
 	void Init();
 	void ProcessInput(GLuint dt);

@@ -19,7 +19,7 @@ Game::Game(const GLuint width, const GLuint height) : width(width), height(heigh
 Game::~Game() {
 }
 
-bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, int& xy) const {
+bool Game::CollisionDetection(const GameObject& brick, BallObject& ball, int& xy) const {
 	// 求矩形和圆中点坐标
 	const glm::vec2 brickCenterPos = brick.position + glm::vec2(brick.size.x / 2.0, brick.size.y / 2.0);
 	const glm::vec2 ballCenterPos = ball.position + glm::vec2(ball.radius / 2.0);
@@ -35,6 +35,11 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 	const glm::vec2 pos = brickCenterPos + vec;
 
 	if (glm::distance(pos, ballCenterPos) <= ball.radius) {
+
+//		// 碰撞修复
+//		const glm::vec2 vec1 = ballCenterPos - pos;
+//		ball.position = pos + glm::normalize(vec1) * (ball.radius / 2);
+
 		// 判断碰到的方向
 		std::vector<glm::vec2> compess{
 			glm::vec2(0.0f , -1.0f),	// 上
@@ -55,31 +60,43 @@ bool Game::CollisionDetection(const GameObject& brick, const BallObject& ball, i
 		const glm::vec2 velo = glm::normalize(ball.velocity);
 		float f;
 		if (dots[0] >= 0 && dots[0] < 1 && dots[1] > 0 && dots[1] <= 1) {
-			f = glm::dot(compess[1], compess[4]);
-			xy = dots[1] >= f ? 0 : 3;
-			if (dots[1] == f && glm::dot(compess[4], velo) == -1) {
-				xy = 4;
+			f = glm::dot(compess[0], compess[4]);
+			xy = dots[0] >= f ? 3 : 0;
+			if (dots[0] == f) {
+				if (glm::dot(compess[4], velo) == -1) {
+					xy = 4;
+				}
+				else xy = 5;
 			}
 		}
 		if (dots[1] >= 0 && dots[1] < 1 && dots[2] > 0 && dots[2] <= 1) {
-			f = glm::dot(compess[2], compess[5]);
-			xy = (dots[2] >= f ? 1 : 0);
-			if (dots[2] == f && glm::dot(compess[5], velo) == -1) {
-				xy = 4;
+			f = glm::dot(compess[1], compess[5]);
+			xy = (dots[1] >= f ? 0 : 1);
+			if (dots[1] == f) {
+				if (glm::dot(compess[5], velo) == -1) {
+					xy = 4;
+				}
+				else xy = 5;
 			}
 		}
 		if (dots[2] >= 0 && dots[2] < 1 && dots[3] > 0 && dots[3] <= 1) {
-			f = glm::dot(compess[3], compess[6]);
-			xy = (dots[3] >= f ? 2 : 1);
-			if (dots[3] == f && glm::dot(compess[6], velo) == -1) {
-				xy = 4;
+			f = glm::dot(compess[2], compess[6]);
+			xy = (dots[2] >= f ? 1 : 2);
+			if (dots[2] == f) {
+				if (glm::dot(compess[6], velo) == -1) {
+					xy = 4;
+				}
+				else xy = 5;
 			}
 		}
 		if (dots[3] >= 0 && dots[3] < 1 && dots[0] > 0 && dots[0] <= 1) {
-			f = glm::dot(compess[0], compess[7]);
-			xy = (dots[0] >= f ? 3 : 2);
-			if (dots[0] == f && glm::dot(compess[7], velo) == -1) {
-				xy = 4;
+			f = glm::dot(compess[3], compess[7]);
+			xy = (dots[3] >= f ? 2 : 3);
+			if (dots[3] == f) {
+				if (glm::dot(compess[7], velo) == -1) {
+					xy = 4;
+				}
+				else xy = 5;
 			}
 		}
 		return true;
@@ -112,7 +129,7 @@ void Game::Init() {
 	ResourceManager::LoadTexture2D("resources/textures/block.png", GL_FALSE, "block");
 	ResourceManager::LoadTexture2D("resources/textures/block_solid.png", GL_FALSE, "block_solid");
 	ResourceManager::LoadTexture2D("resources/textures/paddle.png", GL_TRUE, "paddle");
-	
+
 	// 加载关卡
 	GameLevel one;
 	one.Load("resources/levels/one.lvl", this->width, this->height * 0.4);
@@ -143,6 +160,16 @@ void Game::Init() {
  * 处理输入
  */
 void Game::ProcessInput(const GLuint dt) {
+	if (this->keys[GLFW_KEY_F1])
+	{
+		this->state = GAME_ACTIVE;
+		ball.stuck = false;
+	}
+	if (this->keys[GLFW_KEY_F2])
+	{
+		this->state = GAME_READY;
+	}
+
 	if (this->state == GAME_ACTIVE)
 	{
 		const auto velocity = 10.0f * dt;
@@ -166,14 +193,6 @@ void Game::ProcessInput(const GLuint dt) {
 				}
 			}
 		}
-		if (this->keys[GLFW_KEY_F1])
-		{
-			ball.stuck = false;
-		}
-		if (this->keys[GLFW_KEY_F2])
-		{
-			ball.stuck = true;
-		}
 	}
 }
 
@@ -182,7 +201,7 @@ void Game::ProcessInput(const GLuint dt) {
  */
 void Game::Update(const GLfloat dt) {
 	if (this->state == GAME_ACTIVE) {
-		particles.Update(0.1, ball, 2 , glm::vec2(ball.radius / 2));
+		particles.Update(0.1, ball, 2, glm::vec2(ball.radius / 2));
 		ball.Move(dt, width);
 		int xy = 0;
 		for (GameObject& obj : levels[level].bricks) {
@@ -190,12 +209,19 @@ void Game::Update(const GLfloat dt) {
 				if (!obj.isSolid) {
 					obj.destroyed = true;
 				}
-				if (xy == UP || xy == DOWN) {
-					ball.velocity.y = -ball.velocity.y;
-				}
 				else {
-					ball.velocity.y = -ball.velocity.y;
+					if (xy == UP || xy == DOWN) {
+						ball.velocity.y = -ball.velocity.y;
+					}
+					else if (xy == LEFT || xy == RIGHT) {
+						ball.velocity.x = -ball.velocity.x;
+					}
+					else if (xy == CORNER_N) {
+						ball.velocity.y = -ball.velocity.y;
+						ball.velocity.x = -ball.velocity.x;
+					}
 				}
+
 			}
 		}
 		if (CollisionDetection(player, ball, xy) && xy == UP) {
@@ -211,6 +237,8 @@ void Game::Update(const GLfloat dt) {
 	}
 
 	if (levels[level].IsCompleted()) {
+		this->state = GAME_READY;
+		this->level < this->levels.size() - 1 ? this->level += 1 : this->level = 0;
 		ball.Reset(player.position + glm::vec2(player.size.x / 2 - ball.radius, -player.size.y + ball.radius), glm::vec2(50.0f, -50.0f));
 	}
 }
@@ -219,18 +247,14 @@ void Game::Update(const GLfloat dt) {
  * 渲染游戏
  */
 void Game::Render() {
-	if (this->state == GAME_ACTIVE)
-	{
-		// 绘制背景
-		auto backgroundTexture = ResourceManager::GetTexture2D("background");
-		renderer->DrawSprite(backgroundTexture, glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
-		// 绘制关卡
-		this->levels[this->level].Draw(*renderer);
-		// 绘制挡板
-		this->player.Draw(*renderer);
-		// 绘制球
-		this->ball.Draw(*renderer);
-
-		this->particles.Draw();
-	}
+	// 绘制背景
+	auto backgroundTexture = ResourceManager::GetTexture2D("background");
+	renderer->DrawSprite(backgroundTexture, glm::vec2(0, 0), glm::vec2(this->width, this->height), 0.0f);
+	// 绘制关卡
+	this->levels[this->level].Draw(*renderer);
+	// 绘制挡板
+	this->player.Draw(*renderer);
+	// 绘制球
+	this->ball.Draw(*renderer);
+	this->particles.Draw();
 }
